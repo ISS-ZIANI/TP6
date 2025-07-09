@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\activites\\mcp-demo-spring-python"
+      ]
+    },
+    "Python_MCP_Server": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp[cli]",
+        "mcp",
+        "run",
+        "C:\\activites\\mcp-demo-spring-python\\pyrhon-mcp-server\\server.py"
+      ]
+    }
+  }
+}

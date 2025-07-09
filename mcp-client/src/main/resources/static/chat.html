@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chat AI</title>
+    <style>
+        /* Reset basique */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #eee;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #4caf50;
+            text-shadow: 0 0 10px #4caf50;
+        }
+
+        #chatContainer {
+            background: #1e1e1e;
+            width: 100%;
+            max-width: 600px;
+            height: 70vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 15px #333;
+            overflow: hidden;
+        }
+
+        #chatLog {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 75%;
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 18px;
+            line-height: 1.4;
+            font-size: 1rem;
+            word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .userMsg {
+            background: #4caf50;
+            color: #121212;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .aiMsg {
+            background: #333;
+            color: #ddd;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        #inputArea {
+            display: flex;
+            padding: 15px 20px;
+            background: #272727;
+            border-top: 1px solid #444;
+        }
+
+        #queryInput {
+            flex: 1;
+            font-size: 1rem;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            background: #121212;
+            color: #eee;
+            box-shadow: inset 0 0 6px #000;
+            transition: box-shadow 0.3s ease;
+        }
+
+        #queryInput:focus {
+            box-shadow: inset 0 0 8px #4caf50;
+        }
+
+        #sendBtn {
+            background: #4caf50;
+            border: none;
+            margin-left: 15px;
+            padding: 0 25px;
+            border-radius: 25px;
+            color: #121212;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px #388e3c;
+        }
+
+        #sendBtn:hover {
+            background: #388e3c;
+            box-shadow: 0 6px 12px #2e7031;
+        }
+
+        @media (max-width: 640px) {
+            #chatContainer {
+                height: 60vh;
+                width: 90vw;
+            }
+            #sendBtn {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<h2>Chat AI Stylé</h2>
+<div id="chatContainer">
+    <div id="chatLog"></div>
+    <div id="inputArea">
+        <input type="text" id="queryInput" placeholder="Écris ta question..." autocomplete="off" />
+        <button id="sendBtn" onclick="sendQuery()">Envoyer</button>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('queryInput');
+    const chatLog = document.getElementById('chatLog');
+    const sendBtn = document.getElementById('sendBtn');
+
+    async function sendQuery() {
+        const query = input.value.trim();
+        if (!query) return;
+
+        appendMessage('Toi', query, 'userMsg');
+        input.value = '';
+        input.disabled = true;
+        sendBtn.disabled = true;
+
+        try {
+            const response = await fetch(`/chat?query=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Erreur serveur');
+            const text = await response.text();
+            appendMessage('AI', text, 'aiMsg');
+        } catch (err) {
+            appendMessage('Erreur', 'Impossible de joindre le serveur', 'aiMsg');
+        } finally {
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    }
+
+    function appendMessage(who, msg, className) {
+        const div = document.createElement('div');
+        div.className = `message ${className}`;
+        div.textContent = `${who}: ${msg}`;gitinit
+        chatLog.appendChild(div);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    // Envoi avec touche Enter
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendQuery();
+    });
+</script>
+</body>
+</html>
