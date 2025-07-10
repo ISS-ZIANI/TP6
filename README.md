@@ -1,62 +1,64 @@
-Rapport de Projet – MCP AI Agents (Java + Python)
-Introduction
-Dans ce projet, j’ai développé une application basée sur le protocole MCP (Model Context Protocol), permettant la communication entre un agent intelligent en Java (Spring Boot) et un serveur Python contenant des outils.
-L’objectif est de simuler un système agentique, inspiré des intelligences artificielles modernes telles que ChatGPT, Claude ou les agents LangChain.
+# Rapport de Projet – MCP AI Agents (Java + Python)
 
-Ce que j’ai réalisé
-1. Développement du client agent Java
-J’ai utilisé Spring Boot pour créer une application Java jouant le rôle d’agent intelligent, capable de :
+## Introduction
 
-S’identifier auprès d’un serveur distant (initialisation MCP) ;
+Dans ce projet, j’ai développé une application basée sur le protocole **MCP (Model Context Protocol)**, permettant la communication entre un **agent intelligent en Java (Spring Boot)** et un **serveur Python** contenant des outils.  
+L’objectif est de simuler un système **agentique**, inspiré des intelligences artificielles modernes telles que ChatGPT, Claude ou les agents LangChain.
 
-Écouter les événements via une connexion SSE (Server-Sent Events) ;
+---
 
-Découvrir dynamiquement les outils disponibles via tools/list ;
+## Ce que j’ai réalisé
 
-Appeler un outil spécifique via tools/call, en lui envoyant des paramètres.
+### 1. Développement du client agent Java
 
-Ce client est configurable via un fichier application.properties et peut se connecter à plusieurs serveurs d’outils.
+J’ai utilisé Spring Boot pour créer une application Java jouant le rôle d’**agent intelligent**, capable de :
 
-2. Développement du serveur Python
-Le serveur Python simule une plateforme d’outils distants.
-Il intègre plusieurs outils comme hello, sum, echo, etc.
+- S’identifier auprès d’un serveur distant (initialisation MCP) ;
+- Écouter les événements via une connexion **SSE (Server-Sent Events)** ;
+- Découvrir dynamiquement les outils disponibles via `tools/list` ;
+- Appeler un outil spécifique via `tools/call`, en lui envoyant des paramètres.
+
+Ce client est configurable via un fichier `application.properties` et peut se connecter à plusieurs serveurs d’outils.
+
+---
+
+### 2. Développement du serveur Python
+
+Le serveur Python simule une **plateforme d’outils distants**.  
+Il intègre plusieurs outils comme `hello`, `sum`, `echo`, etc.  
 Il expose deux endpoints principaux :
 
-/sse : envoie des événements à l’agent via SSE ;
-
-/tools/call : répond aux appels d’outils effectués par l’agent.
+- `/sse` : envoie des événements à l’agent via SSE ;
+- `/tools/call` : répond aux appels d’outils effectués par l’agent.
 
 Ce serveur reste simple et extensible, permettant l’ajout d’outils supplémentaires facilement.
 
-3. Utilisation du protocole MCP
-Le projet suit le cycle de vie MCP :
+---
 
-InitializationRequest : l’agent s’identifie ;
+### 3. Utilisation du protocole MCP
 
-InitializationResponse : le serveur confirme l’enregistrement ;
+Le projet suit le **cycle de vie MCP** :
 
-tools/list : l’agent récupère la liste des outils disponibles ;
+- `InitializationRequest` : l’agent s’identifie ;
+- `InitializationResponse` : le serveur confirme l’enregistrement ;
+- `tools/list` : l’agent récupère la liste des outils disponibles ;
+- `tools/call` : l’agent appelle dynamiquement un outil distant avec des paramètres.
 
-tools/call : l’agent appelle dynamiquement un outil distant avec des paramètres.
+Ce mécanisme illustre comment un agent peut **raisonner de manière autonome** et **interagir dynamiquement** avec un environnement d’outils.
 
-Ce mécanisme illustre comment un agent peut raisonner de manière autonome et interagir dynamiquement avec un environnement d’outils.
+---
 
-Configuration et environnement
-Langages utilisés : Java 17, Python 3.10
+## Configuration et environnement
 
-Framework : Spring Boot
+- **Langages utilisés** : Java 17, Python 3.10  
+- **Framework** : Spring Boot  
+- **Protocole de communication** : HTTP + SSE  
+- **Environnement de développement** : IntelliJ IDEA  
+- **Ports utilisés** :
+  - Serveur Python : `8899`
+  - Client Spring Boot : `8066`
 
-Protocole de communication : HTTP + SSE
-
-Environnement de développement : IntelliJ IDEA
-
-Ports utilisés :
-
-Serveur Python : 8899
-
-Client Spring Boot : 8066
-
-Le fichier application.properties permet de configurer facilement l’URL du serveur Python ainsi que les endpoints à utiliser.
+Le fichier `application.properties` permet de configurer facilement l’URL du serveur Python ainsi que les endpoints à utiliser.
 
 ##
 
